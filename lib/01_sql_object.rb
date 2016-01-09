@@ -92,10 +92,10 @@ class SQLObject
     col_names = columns.join(", ")
     question_marks = Array.new(columns.length) {"?"}.join(", ")
     DBConnection.execute(<<-SQL, *attribute_values)
-    INSERT INTO
-      #{self.class.table_name} (#{col_names})
-    VALUES
-    (#{question_marks})
+      INSERT INTO
+        #{self.class.table_name} (#{col_names})
+      VALUES
+      (#{question_marks})
     SQL
     self.id = DBConnection.last_insert_row_id
   end
@@ -104,12 +104,12 @@ class SQLObject
     columns = self.class.columns.map { |column| "#{column} = ?"}
     col_names = columns.join(", ")
     DBConnection.execute(<<-SQL, *attribute_values, self.id)
-    UPDATE
-      #{self.class.table_name}
-    SET
-      #{col_names}
-    WHERE
-      id = ?
+      UPDATE
+        #{self.class.table_name}
+      SET
+        #{col_names}
+      WHERE
+        id = ?
     SQL
 
   end
