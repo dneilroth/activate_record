@@ -4,7 +4,7 @@ Inspired by Rail's Active Record this Object Relation Mapping program leverages 
 
 ## Features
 
-* Rspec for testing. Example: 'rspec spec/01_sql_object.rb'
+* Rspec for testing. Example: `rspec spec/01_sql_object.rb`
 * Instance variables
 * Model attributes
 * Saving and updating of models in SQL database
