@@ -108,10 +108,9 @@ class SQLObject
 
   def update
     columns = self.class.columns.map { |column| "#{column} = ?"}
-    trimmed_columns = self.class.columns.map {|column| "#{column}"}
     col_names = columns.join(", ")
     new_values = attribute_values
-    new_values[-1] = new_values[-1] + 1 if trimmed_columns.include?("lock_version")
+    new_values[-1] = new_values[-1] + 1 if self.class.is_lockable?
 
     DBConnection.execute(<<-SQL, *new_values, self.id)
       UPDATE
