@@ -11,6 +11,7 @@ CREATE TABLE humans (
   fname VARCHAR(255) NOT NULL,
   lname VARCHAR(255) NOT NULL,
   house_id INTEGER,
+  lock_version INTEGER,
 
   FOREIGN KEY(house_id) REFERENCES human(id)
 );
@@ -26,12 +27,12 @@ VALUES
   (1, "26th and Guerrero"), (2, "Dolores and Market");
 
 INSERT INTO
-  humans (id, fname, lname, house_id)
+  humans (id, fname, lname, house_id, lock_version)
 VALUES
-  (1, "Devon", "Watts", 1),
-  (2, "Matt", "Rubens", 1),
-  (3, "Ned", "Ruggeri", 2),
-  (4, "Catless", "Human", NULL);
+  (1, "Devon", "Watts", 1, 1),
+  (2, "Matt", "Rubens", 1, 1),
+  (3, "Ned", "Ruggeri", 2, 1),
+  (4, "Catless", "Human", NULL, 1);
 
 INSERT INTO
   cats (id, name, owner_id)

@@ -1,7 +1,9 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
+require '05_lockable'
 
 class SQLObject
+  # include Lockable
   def self.columns
     DBConnection.execute2(<<-SQL)
   SELECT
@@ -67,7 +69,7 @@ class SQLObject
       1
     SQL
 
-    self.parse_all(results).first
+    obj = self.parse_all(results).first
   end
 
   def initialize(params = {})
@@ -81,6 +83,10 @@ class SQLObject
 
   def attributes
     @attributes ||= {}
+  end
+
+  def lock_version
+    @lock_version ||= nil
   end
 
   def attribute_values
@@ -103,7 +109,10 @@ class SQLObject
   def update
     columns = self.class.columns.map { |column| "#{column} = ?"}
     col_names = columns.join(", ")
-    DBConnection.execute(<<-SQL, *attribute_values, self.id)
+    attributes = attribute_values
+    attributes[-1] = attributes[-1] + 1 if attributes.include?(lock_version)
+    
+    DBConnection.execute(<<-SQL, *attributes, self.id)
       UPDATE
         #{self.class.table_name}
       SET
@@ -117,4 +126,5 @@ class SQLObject
   def save
     self.id.nil? ? insert : update
   end
+
 end

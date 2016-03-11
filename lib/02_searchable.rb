@@ -14,6 +14,17 @@ module Searchable
     SQL
     self.parse_all(results)
   end
+
+  def find
+    super
+    return nil if obj.nil?
+
+    if obj.class.is_lockable?
+      @lock_version = obj.lock_version
+    end
+
+    obj
+  end
 end
 
 class SQLObject
